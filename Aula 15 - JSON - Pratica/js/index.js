@@ -29,63 +29,81 @@ let botaoLogar = document.querySelector("#form-botao");
 
 const objObrigatorio = `
 <div class = "campo-obrigatorio">
-    <img src = "../img/erro.png"/>
+    <img src = "../img/erro.png">
     <small> * Campo Obrigatorio</small>
 </div>
 `;
 
 const checkInputs = (email, senha) => {
-    let control = true;
+  let control = true;
 
-    if (email.value.trim() == "") {
-      email.classList.add("erro");
-      control = false;
+  if (email.value.trim() == "") {
+    email.classList.add("erro");
+    control = false;
 
-      email.parentElement.innerHTML += objObrigatorio;
-    }
-
-    if (senha.value.trim() == "") {
-      senha.classList.add("erro");
-      control = false;
-    }
-
-    return control;
+    email.parentElement.innerHTML += objObrigatorio;
   }
+
+  if (senha.value.trim() == "") {
+    senha.classList.add("erro");
+    control = false;
+
+    senha.parentElement.innerHTML += objObrigatorio;
+  }
+
+  return control;
+}
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-  let usuario = document.querySelector("#email").value;
-  let senha = document.querySelector("#senha").value;
-  // validar se campos não estão nulos.
 
-  console.log(listaUsuarios);
+  let id = listaUsuarios.id;
+  let nome = listaUsuarios.nome;
+  let usuario = document.querySelector("#email");
+  let senha = document.querySelector("#senha");
 
-  
-  if (!checkInputs(email, senha)) {
+  if (!checkInputs(usuario, senha)) {
     event.preventDefault();
   } else {
-    
-    const listaUsuarios = {
-      id: 1,
-      email: email.value,
-      senha: senha.value,
-    }; 
-    
+
     listaUsuarios.forEach(function (itemUsuario) {
-
-    if (
-      itemUsuario.email.trim().toUpperCase() === usuario.toUpperCase() &&
-      itemUsuario.senha.trim().toUpperCase() === senha.toUpperCase()
-    ) {
-      //* aqui insere no session store. */
-    } else {
-      event.preventDefault();
-    }
-  });
+      if (
+        itemUsuario.email.trim().toUpperCase() === usuario.toUpperCase() &&
+        itemUsuario.senha.trim().toUpperCase() === senha.toUpperCase()
+      ) {
+        
+        const cadastro = {
+          id: sessionStorage.getItem("id"), 
+          usuario: sessionStorage.getItem("usuario"),
+          nome: sessionStorage.getItem("nome"),
+        }
+  
+      } else {
+        event.preventDefault();
+      }
+    });
   }
-
- 
 });
+
+window.onload = () => {
+
+  let list = listaUsuarios;
+
+  list.forEach((id) => {
+
+    id.lastElementChild.addEventListener("click", (event) => {
+      event.preventDefault();
+      sessionStorage.setItem(
+        "id",
+        id.lastElementChild.getAttribute("id")
+      );
+      window.location.href = "./bemVinde.html";
+    });
+  })
+}
+
+
+
 //// ATIVIDADE
 
 /// Passo a passo:
